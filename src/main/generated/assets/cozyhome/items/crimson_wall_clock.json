@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "cozyhome:sofa",
+    "model": {
+      "type": "cozyhome:wall_clock",
+      "wall_clock_type": "crimson"
+    }
+  }
+}

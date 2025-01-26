@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ItemScatterer;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class StorageCounterBlock extends BlockWithEntity implements BlockEntityProvider {
     public static final MapCodec<StorageCounterBlock> CODEC = createCodec(StorageCounterBlock::new);
-    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty OPEN = Properties.OPEN;
 
     // Settings Block general shape
@@ -70,7 +70,7 @@ public class StorageCounterBlock extends BlockWithEntity implements BlockEntityP
         if (blockEntity instanceof StorageCounterBlockEntity) {
             player.openHandledScreen((StorageCounterBlockEntity)blockEntity);
             player.incrementStat(Stats.OPEN_BARREL);
-            PiglinBrain.onGuardedBlockInteracted(player, true);
+            PiglinBrain.onGuardedBlockInteracted(((ServerWorld) world), player, true);
         }
         return ActionResult.CONSUME;
     }
@@ -119,11 +119,6 @@ public class StorageCounterBlock extends BlockWithEntity implements BlockEntityP
     @Override
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return this.getShape(state);
-    }
-
-    @Override
-    protected int getOpacity(BlockState state, BlockView world, BlockPos pos) {
-        return super.getOpacity(state, world, pos);
     }
 
     @Override

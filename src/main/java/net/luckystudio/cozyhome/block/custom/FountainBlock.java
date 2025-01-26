@@ -24,9 +24,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.*;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +37,9 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.tick.ScheduledTickView;
 
 import java.util.List;
 
@@ -75,7 +77,7 @@ public class FountainBlock extends AbstractHorizontalConnectingBlock implements 
     }
 
     @Override
-    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (stack.getItem() == Items.WATER_BUCKET) {
             ItemUsage.exchangeStack(stack, player, Items.BUCKET.getDefaultStack());
             return changeState(state, ContainsBlock.WATER, SoundEvents.ITEM_BUCKET_EMPTY, world, pos, player);
@@ -83,27 +85,36 @@ public class FountainBlock extends AbstractHorizontalConnectingBlock implements 
             ItemUsage.exchangeStack(stack, player, Items.BUCKET.getDefaultStack());
             return changeState(state, ContainsBlock.LAVA, SoundEvents.ITEM_BUCKET_EMPTY_LAVA, world, pos, player);
         }
-        return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 
-    private static ItemActionResult changeState(BlockState state, ContainsBlock newContains, SoundEvent soundEvent, World world, BlockPos pos, PlayerEntity player) {
+    private static ActionResult changeState(BlockState state, ContainsBlock newContains, SoundEvent soundEvent, World world, BlockPos pos, PlayerEntity player) {
         // Only run if the state actually should change
         if (state.get(CONTAINS) != newContains) {
             state = state.with(ModProperties.CONTAINS, newContains);
             world.setBlockState(pos, state, Block.NOTIFY_ALL);
             world.playSound(player, pos, soundEvent, SoundCategory.BLOCKS, 1F, 1f);
             world.emitGameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
-            return ItemActionResult.SUCCESS;
+            return ActionResult.SUCCESS;
         }
-        return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
+    ) {
         if (state.get(WATERLOGGED)) {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
     }
 
     // This spawns particles when the block contains lava using the LavaFluid Classes randomDisplayTick method
@@ -132,7 +143,7 @@ public class FountainBlock extends AbstractHorizontalConnectingBlock implements 
 
         // If block contains lava, apply burn damage and set the entity on fire
         if (fillState == ContainsBlock.LAVA && entity instanceof LivingEntity) {
-            entity.damage(world.getDamageSources().hotFloor(), 4.0F);
+            entity.serverDamage(world.getDamageSources().hotFloor(), 4.0F);
             entity.setOnFireFor(3);
         }
 

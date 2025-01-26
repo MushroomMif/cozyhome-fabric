@@ -19,7 +19,10 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.block.WireOrientation;
+import net.minecraft.world.tick.ScheduledTickView;
+import org.jetbrains.annotations.Nullable;
 
 public class FallingLiquidBlock extends Block {
     public static final EnumProperty<ContainsBlock> CONTAINS = ModProperties.CONTAINS;
@@ -52,9 +55,9 @@ public class FallingLiquidBlock extends Block {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
         world.scheduleBlockTick(pos, this, 10);
-        super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+        super.neighborUpdate(state, world, pos, sourceBlock, wireOrientation, notify);
     }
 
     @Override
@@ -72,7 +75,16 @@ public class FallingLiquidBlock extends Block {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
+    ) {
         return state.with(CONTAINS, determineContains((World) world, pos))
                 .with(HAS_UNDER, hasUnder(world, pos));
     }
@@ -93,7 +105,7 @@ public class FallingLiquidBlock extends Block {
         return ContainsBlock.NONE;
     }
 
-    private HasUnderBlock hasUnder(WorldAccess world, BlockPos pos) {
+    private HasUnderBlock hasUnder(WorldView world, BlockPos pos) {
         BlockPos posBelow = pos.down();
         BlockState blockStateBelow = world.getBlockState(posBelow);
         if (blockStateBelow.isSideSolidFullSquare(world, pos, Direction.UP)) return HasUnderBlock.FLAT;
@@ -119,7 +131,6 @@ public class FallingLiquidBlock extends Block {
         if (state.get(HAS_UNDER) != HasUnderBlock.NONE) {
             if (state.get(CONTAINS) == ContainsBlock.LAVA) {
                 world.addParticle(ParticleTypes.SMOKE,
-                        false,
                         pos.getX() + 0.5,
                         pos.getY() + 0.1,
                         pos.getZ() + 0.5,
@@ -129,7 +140,6 @@ public class FallingLiquidBlock extends Block {
             }
             if (state.get(CONTAINS) == ContainsBlock.WATER) {
                 world.addParticle(ParticleTypes.CLOUD,
-                        false,
                         pos.getX() + 0.5,
                         pos.getY() + 0.1,
                         pos.getZ() + 0.5,
@@ -137,7 +147,6 @@ public class FallingLiquidBlock extends Block {
                         0,
                         0);
                 world.addParticle(ParticleTypes.SPLASH,
-                        false,
                         pos.getX() + 0.5,
                         pos.getY() + 0.1,
                         pos.getZ() + 0.5,
@@ -153,10 +162,9 @@ public class FallingLiquidBlock extends Block {
         float aboveEntity = ((float) entity.getY()) + entity.getHeight();
         if (!(entity instanceof LivingEntity) || entity.getBlockStateAtPos().isOf(this)) {
             if (state.get(CONTAINS) == ContainsBlock.LAVA) {
-                entity.damage(world.getDamageSources().lava(), 4.0F);
+                entity.serverDamage(world.getDamageSources().lava(), 4.0F);
                 entity.setOnFireFor(3);
                 world.addParticle(ParticleTypes.SMOKE,
-                        false,
                         pos.getX() + 0.5,
                         aboveEntity,
                         pos.getZ() + 0.5,
@@ -167,7 +175,6 @@ public class FallingLiquidBlock extends Block {
             if (state.get(CONTAINS) == ContainsBlock.WATER) {
                 if (entity.isOnFire()) entity.extinguishWithSound();
                 world.addParticle(ParticleTypes.SPLASH,
-                        false,
                         pos.getX() + 0.5,
                         aboveEntity,
                         pos.getZ() + 0.5,

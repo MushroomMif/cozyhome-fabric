@@ -1,10 +1,12 @@
 package net.luckystudio.cozyhome.block;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.entity.*;
 import net.luckystudio.cozyhome.block.entity.clocks.GrandfatherClockBlockEntity;
 import net.luckystudio.cozyhome.block.entity.clocks.WallClockBlockEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -12,9 +14,8 @@ import net.minecraft.util.Identifier;
 
 public class ModBlockEntityTypes {
 
-    public static final BlockEntityType<StorageCounterBlockEntity> STORAGE_COUNTER_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "storage_counter_block_entity"),
-        BlockEntityType.Builder.create(StorageCounterBlockEntity::new,
+    public static final BlockEntityType<StorageCounterBlockEntity> STORAGE_COUNTER_BLOCK_ENTITY =
+            create("storage_counter_block_entity", StorageCounterBlockEntity::new,
                 ModBlocks.OAK_STORAGE_COUNTER,
                 ModBlocks.SPRUCE_STORAGE_COUNTER,
                 ModBlocks.BIRCH_STORAGE_COUNTER,
@@ -25,8 +26,7 @@ public class ModBlockEntityTypes {
                 ModBlocks.CHERRY_STORAGE_COUNTER,
                 ModBlocks.BAMBOO_STORAGE_COUNTER,
                 ModBlocks.CRIMSON_STORAGE_COUNTER,
-                ModBlocks.WARPED_STORAGE_COUNTER
-        ).build());
+                ModBlocks.WARPED_STORAGE_COUNTER);
 
 //    public static final BlockEntityType<SinkBlockEntity> SINK_COUNTER_BLOCK_ENTITY = Registry.register(
 //            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "sink_counter_block_entity"),
@@ -44,9 +44,8 @@ public class ModBlockEntityTypes {
 //                    ModBlocks.WARPED_SINK_COUNTER
 //            ).build());
 
-    public static final BlockEntityType<DrawerBlockEntity> DRAWER_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "drawer_block_entity"),
-            BlockEntityType.Builder.create(DrawerBlockEntity::new,
+    public static final BlockEntityType<DrawerBlockEntity> DRAWER_BLOCK_ENTITY =
+            create("drawer_block_entity", DrawerBlockEntity::new,
                     ModBlocks.OAK_DRAWER,
                     ModBlocks.SPRUCE_DRAWER,
                     ModBlocks.BIRCH_DRAWER,
@@ -57,12 +56,10 @@ public class ModBlockEntityTypes {
                     ModBlocks.CHERRY_DRAWER,
                     ModBlocks.BAMBOO_DRAWER,
                     ModBlocks.CRIMSON_DRAWER,
-                    ModBlocks.WARPED_DRAWER
-            ).build());
+                    ModBlocks.WARPED_DRAWER);
 
-    public static final BlockEntityType<ChairBlockEntity> CHAIR_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "chair_block_entity"),
-            BlockEntityType.Builder.create(ChairBlockEntity::new,
+    public static final BlockEntityType<ChairBlockEntity> CHAIR_BLOCK_ENTITY =
+            create("chair_block_entity", ChairBlockEntity::new,
                     ModBlocks.OAK_CHAIR,
                     ModBlocks.SPRUCE_CHAIR,
                     ModBlocks.BIRCH_CHAIR,
@@ -77,12 +74,10 @@ public class ModBlockEntityTypes {
                     ModBlocks.IRON_CHAIR,
                     ModBlocks.GLASS_CHAIR,
                     ModBlocks.UNDEAD_CHAIR,
-                    ModBlocks.OMINOUS_CHAIR
-            ).build());
+                    ModBlocks.OMINOUS_CHAIR);
 
-    public static final BlockEntityType<LampBlockEntity> LAMP_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "lamp_block_entity"),
-            BlockEntityType.Builder.create(LampBlockEntity::new,
+    public static final BlockEntityType<LampBlockEntity> LAMP_BLOCK_ENTITY =
+            create("lamp_block_entity", LampBlockEntity::new,
                     ModBlocks.OAK_LAMP,
                     ModBlocks.SPRUCE_LAMP,
                     ModBlocks.BIRCH_LAMP,
@@ -97,12 +92,10 @@ public class ModBlockEntityTypes {
                     ModBlocks.IRON_LAMP,
                     ModBlocks.GLASS_LAMP,
                     ModBlocks.UNDEAD_LAMP,
-                    ModBlocks.OMINOUS_LAMP
-            ).build());
+                    ModBlocks.OMINOUS_LAMP);
 
-    public static final BlockEntityType<SofaBlockEntity> SOFA_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "sofa_block_entity"),
-            BlockEntityType.Builder.create(SofaBlockEntity::new,
+    public static final BlockEntityType<SofaBlockEntity> SOFA_BLOCK_ENTITY =
+            create("sofa_block_entity", SofaBlockEntity::new,
                     ModBlocks.OAK_SOFA,
                     ModBlocks.SPRUCE_SOFA,
                     ModBlocks.BIRCH_SOFA,
@@ -113,12 +106,10 @@ public class ModBlockEntityTypes {
                     ModBlocks.CHERRY_SOFA,
                     ModBlocks.BAMBOO_SOFA,
                     ModBlocks.CRIMSON_SOFA,
-                    ModBlocks.WARPED_SOFA
-            ).build());
+                    ModBlocks.WARPED_SOFA);
 
-    public static final BlockEntityType<CouchBlockEntity> COUCH_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "couch_block_entity"),
-            BlockEntityType.Builder.create(CouchBlockEntity::new,
+    public static final BlockEntityType<CouchBlockEntity> COUCH_BLOCK_ENTITY =
+            create("couch_block_entity", CouchBlockEntity::new,
                     ModBlocks.OAK_COUCH,
                     ModBlocks.SPRUCE_COUCH,
                     ModBlocks.BIRCH_COUCH,
@@ -129,12 +120,10 @@ public class ModBlockEntityTypes {
                     ModBlocks.CHERRY_COUCH,
                     ModBlocks.BAMBOO_COUCH,
                     ModBlocks.CRIMSON_COUCH,
-                    ModBlocks.WARPED_COUCH
-            ).build());
+                    ModBlocks.WARPED_COUCH);
 
-    public static final BlockEntityType<WallClockBlockEntity> WALL_CLOCK_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "clock_block_entity"),
-            BlockEntityType.Builder.create(WallClockBlockEntity::new,
+    public static final BlockEntityType<WallClockBlockEntity> WALL_CLOCK_BLOCK_ENTITY =
+            create("clock_block_entity", WallClockBlockEntity::new,
                     ModBlocks.OAK_WALL_CLOCK,
                     ModBlocks.SPRUCE_WALL_CLOCK,
                     ModBlocks.BIRCH_WALL_CLOCK,
@@ -149,32 +138,28 @@ public class ModBlockEntityTypes {
                     ModBlocks.IRON_WALL_CLOCK,
                     ModBlocks.GLASS_WALL_CLOCK,
                     ModBlocks.UNDEAD_WALL_CLOCK,
-                    ModBlocks.OMINOUS_WALL_CLOCK
-            ).build());
+                    ModBlocks.OMINOUS_WALL_CLOCK);
 
-    public static final BlockEntityType<GrandfatherClockBlockEntity> GRANDFATHER_CLOCK_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "grandfather_clock_block_entity"),
-            BlockEntityType.Builder.create(GrandfatherClockBlockEntity::new,
-                    ModBlocks.OAK_GRANDFATHER_CLOCK,
-                    ModBlocks.SPRUCE_GRANDFATHER_CLOCK,
-                    ModBlocks.BIRCH_GRANDFATHER_CLOCK,
-                    ModBlocks.JUNGLE_GRANDFATHER_CLOCK,
-                    ModBlocks.ACACIA_GRANDFATHER_CLOCK,
-                    ModBlocks.DARK_OAK_GRANDFATHER_CLOCK,
-                    ModBlocks.MANGROVE_GRANDFATHER_CLOCK,
-                    ModBlocks.CHERRY_GRANDFATHER_CLOCK,
-                    ModBlocks.BAMBOO_GRANDFATHER_CLOCK,
-                    ModBlocks.CRIMSON_GRANDFATHER_CLOCK,
-                    ModBlocks.WARPED_GRANDFATHER_CLOCK,
-                    ModBlocks.IRON_GRANDFATHER_CLOCK,
-                    ModBlocks.GLASS_GRANDFATHER_CLOCK,
-                    ModBlocks.UNDEAD_GRANDFATHER_CLOCK,
-                    ModBlocks.OMINOUS_GRANDFATHER_CLOCK
-            ).build());
+    public static final BlockEntityType<GrandfatherClockBlockEntity> GRANDFATHER_CLOCK_BLOCK_ENTITY =
+        create("grandfather_clock_block_entity",  GrandfatherClockBlockEntity::new,
+            ModBlocks.OAK_GRANDFATHER_CLOCK,
+            ModBlocks.SPRUCE_GRANDFATHER_CLOCK,
+            ModBlocks.BIRCH_GRANDFATHER_CLOCK,
+            ModBlocks.JUNGLE_GRANDFATHER_CLOCK,
+            ModBlocks.ACACIA_GRANDFATHER_CLOCK,
+            ModBlocks.DARK_OAK_GRANDFATHER_CLOCK,
+            ModBlocks.MANGROVE_GRANDFATHER_CLOCK,
+            ModBlocks.CHERRY_GRANDFATHER_CLOCK,
+            ModBlocks.BAMBOO_GRANDFATHER_CLOCK,
+            ModBlocks.CRIMSON_GRANDFATHER_CLOCK,
+            ModBlocks.WARPED_GRANDFATHER_CLOCK,
+            ModBlocks.IRON_GRANDFATHER_CLOCK,
+            ModBlocks.GLASS_GRANDFATHER_CLOCK,
+            ModBlocks.UNDEAD_GRANDFATHER_CLOCK,
+            ModBlocks.OMINOUS_GRANDFATHER_CLOCK);
 
-    public static final BlockEntityType<ChimneyBlockEntity> CHIMNEY_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "chimney_block_entity"),
-            BlockEntityType.Builder.create(ChimneyBlockEntity::new,
+    public static final BlockEntityType<ChimneyBlockEntity> CHIMNEY_BLOCK_ENTITY =
+            create("chimney_block_entity", ChimneyBlockEntity::new,
                     ModBlocks.STONE_BRICK_CHIMNEY,
                     ModBlocks.MOSSY_STONE_BRICK_CHIMNEY,
                     ModBlocks.GRANITE_CHIMNEY,
@@ -191,13 +176,18 @@ public class ModBlockEntityTypes {
                     ModBlocks.RED_NETHER_BRICK_CHIMNEY,
                     ModBlocks.BLACKSTONE_CHIMNEY,
                     ModBlocks.ENDSTONE_CHIMNEY,
-                    ModBlocks.PURPUR_CHIMNEY
+                    ModBlocks.PURPUR_CHIMNEY);
 
-            ).build());
+    public static final BlockEntityType<TelescopeBlockEntity> TELESCOPE_BLOCK_ENTITY =
+            create("telescope_block_entity", TelescopeBlockEntity::new, ModBlocks.TELESCOPE);
 
-    public static final BlockEntityType<TelescopeBlockEntity> TELESCOPE_BLOCK_ENTITY = Registry.register(
-            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "telescope_block_entity"),
-            BlockEntityType.Builder.create(TelescopeBlockEntity::new, ModBlocks.TELESCOPE).build());
+    private static <T extends BlockEntity> BlockEntityType<T> create(
+            String name, FabricBlockEntityTypeBuilder.Factory<? extends T> entityFactory, Block... blocks
+    ) {
+        Identifier id = Identifier.of(CozyHome.MOD_ID, name);
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, id,
+                FabricBlockEntityTypeBuilder.<T>create(entityFactory, blocks).build());
+    }
 
     public static void registerBlockEntities() {
         CozyHome.LOGGER.info("Registering block entities for " + CozyHome.MOD_ID);

@@ -10,6 +10,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +33,9 @@ public class GrandfatherClockBlockEntity extends BlockEntity implements ClockBlo
     public static void tick(World world, BlockPos pos, BlockState state, GrandfatherClockBlockEntity blockEntity) {
         blockEntity.incrementTicks();
         ClockFunctionalityHandler.handleHandRotations(world, pos, state, blockEntity);
-        ClockFunctionalityHandler.handleGrandfatherClock(world, pos, state, blockEntity, 7.5f);
+        if (world instanceof ServerWorld serverWorld) {
+            ClockFunctionalityHandler.handleGrandfatherClock(serverWorld, pos, state, blockEntity, 7.5f);
+        }
     }
 
     @Override

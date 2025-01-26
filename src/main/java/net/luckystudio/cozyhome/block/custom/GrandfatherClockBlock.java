@@ -29,9 +29,11 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationPropertyHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.*;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -106,35 +108,43 @@ public class GrandfatherClockBlock extends BlockWithEntity implements Waterlogga
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
+    ) {
         TripleTallBlock currentPart = state.get(TRIPLE_TALL_BLOCK); // Get the part of the block (TOP, MIDDLE, or BOTTOM)
         if (direction.getAxis() != Direction.Axis.Y) { // Check if the direction is along the Y-axis (up or down)
-            return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+            return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
         }
         switch (currentPart) { // Handle the logic based on which part of the block this is
             case TOP:
                 if (direction == Direction.DOWN) { // Ensure the middle part is below and the block is placeable
                     BlockState belowState = world.getBlockState(pos.down());
                     return (!belowState.isOf(this) || belowState.get(TRIPLE_TALL_BLOCK) != TripleTallBlock.MIDDLE) ?
-                            Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos); // Break the block if the middle part is missing
+                            Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random); // Break the block if the middle part is missing
                 }
                 break;
             case MIDDLE:
                 if (direction == Direction.UP) { // Ensure the top part is above and the bottom part is below
                     BlockState aboveState = world.getBlockState(pos.up());
                     return (!aboveState.isOf(this) || aboveState.get(TRIPLE_TALL_BLOCK) != TripleTallBlock.TOP) ?
-                    Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos); // Break the block if the middle part is missing
+                    Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random); // Break the block if the middle part is missing
                 } else if (direction == Direction.DOWN) {
                     BlockState belowState = world.getBlockState(pos.down());
                     return  (!belowState.isOf(this) || belowState.get(TRIPLE_TALL_BLOCK) != TripleTallBlock.BOTTOM) ?
-                    Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos); // Break the block if the middle part is missing
+                    Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random); // Break the block if the middle part is missing
                 }
                 break;
             case BOTTOM:
                 if (direction == Direction.UP) { // Ensure the middle part is above
                     BlockState aboveState = world.getBlockState(pos.up());
                     if (!aboveState.isOf(this) || aboveState.get(TRIPLE_TALL_BLOCK) != TripleTallBlock.MIDDLE) {
-                        world.breakBlock(pos, true);
                         return Blocks.AIR.getDefaultState();  // Break the block if the middle part is missing
                     }
                 }
@@ -142,7 +152,7 @@ public class GrandfatherClockBlock extends BlockWithEntity implements Waterlogga
             default:
                 break;
         }
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
     }
 
     @Nullable
@@ -150,7 +160,7 @@ public class GrandfatherClockBlock extends BlockWithEntity implements Waterlogga
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockPos blockPos = ctx.getBlockPos();
         World world = ctx.getWorld();
-        return blockPos.getY() < world.getTopY() - 2 && world.getBlockState(blockPos.up()).canReplace(ctx) && world.getBlockState(blockPos.up(2)).canReplace(ctx) ? super.getPlacementState(ctx)
+        return blockPos.getY() < world.getTopYInclusive() - 2 && world.getBlockState(blockPos.up()).canReplace(ctx) && world.getBlockState(blockPos.up(2)).canReplace(ctx) ? super.getPlacementState(ctx)
                 .with(ROTATION, RotationPropertyHelper.fromYaw(ctx.getPlayerYaw()))
                 .with(TRIPLE_TALL_BLOCK, TripleTallBlock.BOTTOM) : null;
     }

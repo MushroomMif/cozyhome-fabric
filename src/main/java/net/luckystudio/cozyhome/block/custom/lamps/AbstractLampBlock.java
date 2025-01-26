@@ -18,23 +18,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractLampBlock extends BlockWithEntity implements ConnectingBlock {
     public static final EnumProperty<VerticalLinearConnectionBlock> CONNECTION = ModProperties.VERTICAL_CONNECTION;
-    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty LIT = RedstoneTorchBlock.LIT;
 
     public AbstractLampBlock(Settings settings) {
@@ -89,16 +89,16 @@ public abstract class AbstractLampBlock extends BlockWithEntity implements Conne
     }
 
     @Override
-    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof LampBlockEntity lampBlockEntity) {
             VerticalLinearConnectionBlock connection = state.get(CONNECTION);
                 if (stack.getItem() instanceof DyeItem dyeItem) {
                     final int itemColor = dyeItem.getColor().getEntityColor();
                     final int blockColor = ModColorHandler.getBlockColor(lampBlockEntity, -17170434);
-                    final int newColor = ColorHelper.Argb.averageArgb(blockColor, itemColor);
+                    final int newColor = ColorHelper.average(blockColor, itemColor);
                     if (blockColor == newColor) {
                         player.sendMessage(Text.translatable("message.cozyhome.same_color"), true);
-                        return ItemActionResult.SUCCESS;
+                        return ActionResult.SUCCESS;
                     }
                     ComponentMap components = ComponentMap.builder().add(DataComponentTypes.DYED_COLOR, new DyedColorComponent(newColor, false)).build();
                     lampBlockEntity.setComponents(components);
@@ -106,7 +106,7 @@ public abstract class AbstractLampBlock extends BlockWithEntity implements Conne
                     lampBlockEntity.markDirty();
                     world.updateListeners(pos, state, state, 0);
                 } else if (stack.getItem() == this.asItem() && hit.getSide() == Direction.UP) {
-                    return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                    return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
                 } else {
                     state = state.cycle(LIT);
                     float f = state.get(LIT) ? 1.0F : 0.8F;
@@ -127,13 +127,22 @@ public abstract class AbstractLampBlock extends BlockWithEntity implements Conne
                     world.setBlockState(pos, state, Block.NOTIFY_ALL);
                     world.playSound(player, pos, ModSoundEvents.LAMP_TOGGLE, SoundCategory.BLOCKS, 0.3F, f);
                 }
-                return ItemActionResult.SUCCESS;
+                return ActionResult.SUCCESS;
         }
-        return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
+    ) {
         return canPlaceAt(state, world, pos) ? state.with(CONNECTION, ModProperties.setVerticalConnection(state, world, pos)) : Blocks.AIR.getDefaultState();
     }
 

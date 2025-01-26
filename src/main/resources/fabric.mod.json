@@ -7,12 +7,8 @@
 	"authors": [
 		"LuckyOwl, DipChip"
 	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
 	"license": "MIT",
-	"icon": "assets/cozyhome/icon.png",
+	"icon": "assets/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -29,12 +25,9 @@
 		"cozyhome.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.5",
-		"minecraft": "~1.21",
+		"fabricloader": ">=0.16.8",
+		"minecraft": ">=1.21.4",
 		"java": ">=21",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }

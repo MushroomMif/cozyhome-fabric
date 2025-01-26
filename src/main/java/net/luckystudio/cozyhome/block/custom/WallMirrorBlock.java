@@ -3,10 +3,7 @@ package net.luckystudio.cozyhome.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.luckystudio.cozyhome.block.util.enums.VerticalLinearConnectionBlock;
-import net.luckystudio.cozyhome.screen.MirrorScreen;
 import net.minecraft.block.*;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -14,16 +11,14 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class WallMirrorBlock extends HorizontalFacingBlock implements Waterloggable{
@@ -95,7 +90,14 @@ public class WallMirrorBlock extends HorizontalFacingBlock implements Waterlogga
     }
     @Override
     public BlockState getStateForNeighborUpdate(
-            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
     ) {
         // Check if the block can remain in place
         if (direction.getOpposite() == state.get(FACING) && !state.canPlaceAt(world, pos)) {
@@ -104,18 +106,10 @@ public class WallMirrorBlock extends HorizontalFacingBlock implements Waterlogga
 
         // Schedule fluid tick if waterlogged
         if (state.get(WATERLOGGED)) {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
         // Update stackable state
-        updateStackableState(world, pos, state);
-
-        // Return updated state
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-    }
-
-    // Helper method to update the stackable state
-    private void updateStackableState(WorldAccess world, BlockPos pos, BlockState state) {
         BlockPos blockPosAbove = pos.up();
         BlockPos blockPosBelow = pos.down();
 
@@ -123,9 +117,9 @@ public class WallMirrorBlock extends HorizontalFacingBlock implements Waterlogga
         BlockState relativeTailBlock = world.getBlockState(blockPosBelow);
 
         VerticalLinearConnectionBlock linearConnectionBlockType = getLinearConnectionBlockType(state, relativeHeadBlock, relativeTailBlock);
-        BlockState updatedState = state.with(STACKABLE_BLOCK, linearConnectionBlockType);
 
-        world.setBlockState(pos, updatedState, 3); // Use flags for block updates
+        // Return updated state
+        return state.with(STACKABLE_BLOCK, linearConnectionBlockType);
     }
 
     // Determines the type of connection based on neighbors

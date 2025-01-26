@@ -6,11 +6,9 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.block.util.ModBlockUtilities;
-import net.luckystudio.cozyhome.item.ModItems;
 import net.luckystudio.cozyhome.util.ModColorHandler;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.component.type.DyedColorComponent;
 
 @Environment(EnvType.CLIENT)
 public class ModRenderLayers {
@@ -43,6 +41,8 @@ public class ModRenderLayers {
                 ModBlocks.WARPED_TABLE,
                 ModBlocks.IRON_TABLE,
                 ModBlocks.GLASS_TABLE,
+                ModBlocks.UNDEAD_TABLE,
+                ModBlocks.OMINOUS_TABLE,
                 // Lamps
                 ModBlocks.OAK_LAMP,
                 ModBlocks.SPRUCE_LAMP,
@@ -165,36 +165,36 @@ public class ModRenderLayers {
                 ModBlocks.PURPUR_FOUNTAIN_SPROUT,
                 ModBlocks.FALLING_LIQUID
         );
-
-        ColorProviderRegistry.ITEM.register(((stack, tintIndex) -> DyedColorComponent.getColor(stack, -17170434)),
-                ModItems.CUSHION,
-                ModBlocks.OAK_COUCH,
-                ModBlocks.SPRUCE_COUCH,
-                ModBlocks.BIRCH_COUCH,
-                ModBlocks.JUNGLE_COUCH,
-                ModBlocks.ACACIA_COUCH,
-                ModBlocks.DARK_OAK_COUCH,
-                ModBlocks.MANGROVE_COUCH,
-                ModBlocks.CHERRY_COUCH,
-                ModBlocks.BAMBOO_COUCH,
-                ModBlocks.CRIMSON_COUCH,
-                ModBlocks.WARPED_COUCH,
-                ModBlocks.OAK_LAMP,
-                ModBlocks.SPRUCE_LAMP,
-                ModBlocks.BIRCH_LAMP,
-                ModBlocks.JUNGLE_LAMP,
-                ModBlocks.ACACIA_LAMP,
-                ModBlocks.DARK_OAK_LAMP,
-                ModBlocks.MANGROVE_LAMP,
-                ModBlocks.CHERRY_LAMP,
-                ModBlocks.BAMBOO_LAMP,
-                ModBlocks.CRIMSON_LAMP,
-                ModBlocks.WARPED_LAMP,
-                ModBlocks.IRON_LAMP,
-                ModBlocks.GLASS_LAMP,
-                ModBlocks.UNDEAD_LAMP,
-                ModBlocks.OMINOUS_LAMP
-        );
+//
+//        ColorProviderRegistry.ITEM.register(((stack, tintIndex) -> DyedColorComponent.getColor(stack, -17170434)),
+//                ModItems.CUSHION,
+//                ModBlocks.OAK_COUCH,
+//                ModBlocks.SPRUCE_COUCH,
+//                ModBlocks.BIRCH_COUCH,
+//                ModBlocks.JUNGLE_COUCH,
+//                ModBlocks.ACACIA_COUCH,
+//                ModBlocks.DARK_OAK_COUCH,
+//                ModBlocks.MANGROVE_COUCH,
+//                ModBlocks.CHERRY_COUCH,
+//                ModBlocks.BAMBOO_COUCH,
+//                ModBlocks.CRIMSON_COUCH,
+//                ModBlocks.WARPED_COUCH,
+//                ModBlocks.OAK_LAMP,
+//                ModBlocks.SPRUCE_LAMP,
+//                ModBlocks.BIRCH_LAMP,
+//                ModBlocks.JUNGLE_LAMP,
+//                ModBlocks.ACACIA_LAMP,
+//                ModBlocks.DARK_OAK_LAMP,
+//                ModBlocks.MANGROVE_LAMP,
+//                ModBlocks.CHERRY_LAMP,
+//                ModBlocks.BAMBOO_LAMP,
+//                ModBlocks.CRIMSON_LAMP,
+//                ModBlocks.WARPED_LAMP,
+//                ModBlocks.IRON_LAMP,
+//                ModBlocks.GLASS_LAMP,
+//                ModBlocks.UNDEAD_LAMP,
+//                ModBlocks.OMINOUS_LAMP
+//        );
 
         ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> ModColorHandler.getBlockColor(view.getBlockEntity(pos), -17170434),
                 ModBlocks.OAK_COUCH,

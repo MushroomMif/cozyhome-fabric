@@ -4,8 +4,6 @@ package net.luckystudio.cozyhome.block.renderer.models;// Made with Blockbench 4
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class GrandfatherClockModel extends Model {
 	private final ModelPart main;
@@ -13,7 +11,7 @@ public class GrandfatherClockModel extends Model {
 	private final ModelPart hourHand;
 	private final ModelPart pendulum;
 	public GrandfatherClockModel(ModelPart root) {
-        super(RenderLayer::getEntityCutoutNoCullZOffset);
+        super(root, RenderLayer::getEntityCutoutNoCullZOffset);
         this.main = root.getChild("main");
 		this.minHand = root.getChild("min_hand");
 		this.hourHand = root.getChild("hour_hand");
@@ -46,14 +44,6 @@ public class GrandfatherClockModel extends Model {
 
 		ModelPartData pendulum = modelPartData.addChild("pendulum", ModelPartBuilder.create().uv(60, 0).cuboid(-2.0F, 0.0F, 0.0F, 4.0F, 20.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -6.0F, 0.0F));
 		return TexturedModelData.of(modelData, 128, 128);
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		main.render(matrices, vertices, light, overlay);
-		minHand.render(matrices, vertices, light, overlay);
-		hourHand.render(matrices, vertices, light, overlay);
-		pendulum.render(matrices, vertices, light, overlay);
 	}
 
 	public void setAngles(float hourHandTurnAmount, float minuteHandTurnAmount, float pendulumSwingAmount) {

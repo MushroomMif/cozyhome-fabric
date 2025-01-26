@@ -4,16 +4,10 @@ package net.luckystudio.cozyhome.block.renderer.models;// Made with Blockbench 4
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
 
-public class SofaModel extends Model {
-	private final ModelPart dyeable;
-	private final ModelPart frame;
+public class SofaModel extends Model { ;
 	public SofaModel(ModelPart root) {
-		super(RenderLayer::getEntityCutout);
-		this.dyeable = root.getChild("dyeable");
-		this.frame = root.getChild("frame");
+		super(root, RenderLayer::getEntityCutout);
 	}
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
@@ -37,11 +31,5 @@ public class SofaModel extends Model {
 
 		ModelPartData cube_r1 = frame.addChild("cube_r1", ModelPartBuilder.create().uv(0, 61).cuboid(-8.0F, 2.5F, -2.5F, 16.0F, 1.0F, 6.0F, new Dilation(0.0F)), ModelTransform.of(-17.0F, -5.5F, 6.5F, -0.1309F, 0.0F, 0.0F));
 		return TexturedModelData.of(modelData, 128, 128);
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		dyeable.render(matrices, vertices, light, overlay);
-		frame.render(matrices, vertices, light, overlay);
 	}
 }

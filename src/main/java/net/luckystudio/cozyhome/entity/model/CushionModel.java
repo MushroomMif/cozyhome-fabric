@@ -1,15 +1,12 @@
 package net.luckystudio.cozyhome.entity.model;
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.render.entity.state.EntityRenderState;
 
-public class CushionModel extends EntityModel<Entity> {
-	private final ModelPart bb_main;
+public class CushionModel extends EntityModel<EntityRenderState> {
 	public CushionModel(ModelPart root) {
-		this.bb_main = root.getChild("bb_main");
+        super(root);
 	}
 
 	public static TexturedModelData getTexturedModelData() {
@@ -26,14 +23,5 @@ public class CushionModel extends EntityModel<Entity> {
 
 		ModelPartData south_r1 = bb_main.addChild("south_r1", ModelPartBuilder.create().uv(0, 43).cuboid(-6.0F, 0.0F, 0.0F, 12.0F, 10.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -10.0F, 6.0F, 0.0436F, 0.0F, 0.0F));
 		return TexturedModelData.of(modelData, 64, 64);
-	}
-
-	@Override
-	public void setAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		bb_main.render(matrices, vertices, light, overlay);
 	}
 }

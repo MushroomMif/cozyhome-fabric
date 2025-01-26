@@ -3,7 +3,8 @@ package net.luckystudio.cozyhome;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.*;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.luckystudio.cozyhome.block.ModBlockEntityTypes;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.block.renderer.blockrenders.*;
@@ -12,16 +13,19 @@ import net.luckystudio.cozyhome.client.ModEntityModelLayers;
 import net.luckystudio.cozyhome.client.ModRenderLayers;
 import net.luckystudio.cozyhome.entity.ModEntities;
 import net.luckystudio.cozyhome.entity.client.SeatRenderer;
-import net.luckystudio.cozyhome.entity.model.*;
-import net.luckystudio.cozyhome.item.renderer.ChairItemRenderer;
-import net.luckystudio.cozyhome.item.renderer.SofaItemRenderer;
-import net.luckystudio.cozyhome.item.renderer.WallClockItemRenderer;
+import net.luckystudio.cozyhome.entity.model.CushionModel;
+import net.luckystudio.cozyhome.entity.model.SeatEntityModel;
+import net.luckystudio.cozyhome.entity.model.TelescopeModel;
+import net.luckystudio.cozyhome.item.renderer.SpecialChairItemRenderer;
+import net.luckystudio.cozyhome.item.renderer.SpecialSofaItemRenderer;
+import net.luckystudio.cozyhome.item.renderer.SpecialWallClockItemRenderer;
 import net.luckystudio.cozyhome.screen.drawer.DrawerScreen;
 import net.luckystudio.cozyhome.screen.drawer.DrawerScreenHandler;
 import net.luckystudio.cozyhome.screen.storage_counter.StorageCounterScreen;
 import net.luckystudio.cozyhome.screen.storage_counter.StorageCounterScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.item.model.special.SpecialModelTypes;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -67,6 +71,10 @@ public class CozyHomeClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(ModEntityModelLayers.WALL_CLOCK, WallClockModel::getTexturedModelData);
         BlockEntityRendererFactories.register(ModBlockEntityTypes.WALL_CLOCK_BLOCK_ENTITY, WallClockBlockEntityRenderer::new);
 
+        SpecialModelTypes.ID_MAPPER.put(SpecialChairItemRenderer.ID, SpecialChairItemRenderer.Unbaked.CODEC);
+        SpecialModelTypes.ID_MAPPER.put(SpecialSofaItemRenderer.ID, SpecialSofaItemRenderer.CODEC);
+        SpecialModelTypes.ID_MAPPER.put(SpecialWallClockItemRenderer.ID, SpecialWallClockItemRenderer.CODEC);
+
         ItemConvertible[] chairItems = {
                 ModBlocks.OAK_CHAIR,
                 ModBlocks.SPRUCE_CHAIR,
@@ -84,9 +92,9 @@ public class CozyHomeClient implements ClientModInitializer {
                 ModBlocks.UNDEAD_CHAIR,
                 ModBlocks.OMINOUS_CHAIR
         };
-        for (ItemConvertible chair : chairItems) {
-            BuiltinItemRendererRegistry.INSTANCE.register(chair, new ChairItemRenderer());
-        }
+//        for (ItemConvertible chair : chairItems) {
+//            BuiltinItemRendererRegistry.INSTANCE.register(chair, new SpecialChairItemRenderer());
+//        }
 
         ItemConvertible[] sofaItems = {
                 ModBlocks.OAK_SOFA,
@@ -101,9 +109,9 @@ public class CozyHomeClient implements ClientModInitializer {
                 ModBlocks.CRIMSON_SOFA,
                 ModBlocks.WARPED_SOFA
         };
-        for (ItemConvertible sofa : sofaItems) {
-            BuiltinItemRendererRegistry.INSTANCE.register(sofa, new SofaItemRenderer());
-        }
+//        for (ItemConvertible sofa : sofaItems) {
+//            BuiltinItemRendererRegistry.INSTANCE.register(sofa, new SpecialSofaItemRenderer());
+//        }
 
         ItemConvertible[] wallClockItems = {
                 ModBlocks.OAK_WALL_CLOCK,
@@ -122,9 +130,9 @@ public class CozyHomeClient implements ClientModInitializer {
                 ModBlocks.UNDEAD_WALL_CLOCK,
                 ModBlocks.OMINOUS_WALL_CLOCK
         };
-        for (ItemConvertible wallClock : wallClockItems) {
-            BuiltinItemRendererRegistry.INSTANCE.register(wallClock, new WallClockItemRenderer());
-        }
+//        for (ItemConvertible wallClock : wallClockItems) {
+//            BuiltinItemRendererRegistry.INSTANCE.register(wallClock, new SpecialWallClockItemRenderer());
+//        }
         ModRenderLayers.registerBlockRenderLayers();
         ModRenderLayers.registerColorProviders();
     }

@@ -36,7 +36,7 @@ public class CouchBlockEntity extends BlockEntity implements LootableInventory, 
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
         if (!this.writeLootTable(nbt) && !this.stack.isEmpty()) {
-            nbt.put("item", this.stack.encode(registryLookup));
+            nbt.put("item", this.stack.toNbt(registryLookup));
         }
     }
 

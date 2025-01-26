@@ -94,16 +94,16 @@ public class SofaBlock extends AbstractSeatBlock {
     }
 
     @Override
-    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         // Check if the block at the given position has an ItemRackBlockEntity associated with it.
         if (world.getBlockEntity(pos) instanceof SofaBlockEntity sofaBlockEntity) {
             if (stack.getItem() instanceof DyeItem dyeItem) {
                 final int itemColor = dyeItem.getColor().getEntityColor();
                 final int blockColor = ModColorHandler.getBlockColor(sofaBlockEntity, -17170434);
-                final int newColor = ColorHelper.Argb.averageArgb(blockColor, itemColor);
+                final int newColor = ColorHelper.average(blockColor, itemColor);
                 if (blockColor == newColor) {
                     player.sendMessage(Text.translatable("message.cozyhome.same_color"), true);
-                    return ItemActionResult.SUCCESS;
+                    return ActionResult.SUCCESS;
                 }
                 ComponentMap components = ComponentMap.builder().add(DataComponentTypes.DYED_COLOR, new DyedColorComponent(newColor, false)).build();
                 sofaBlockEntity.setComponents(components);
@@ -111,7 +111,7 @@ public class SofaBlock extends AbstractSeatBlock {
                 stack.decrementUnlessCreative(1, player);
                 sofaBlockEntity.markDirty();
                 world.updateListeners(pos, state, state, 0);
-                return ItemActionResult.SUCCESS;
+                return ActionResult.SUCCESS;
             }
 
             // Check if the item in hand is a valid tool or weapon.
@@ -149,7 +149,7 @@ public class SofaBlock extends AbstractSeatBlock {
                     world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 
                     // Return a successful result to stop further interaction processing.
-                    return ItemActionResult.SUCCESS;
+                    return ActionResult.SUCCESS;
                 }
             } else if (!sofaBlockEntity.isEmpty() && stack.getItem() == Items.SHEARS) {
                 // Get the item stack currently in the block
@@ -180,14 +180,14 @@ public class SofaBlock extends AbstractSeatBlock {
                     world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 
                     // Return a success result
-                    return ItemActionResult.SUCCESS;
+                    return ActionResult.SUCCESS;
                 }
             } else {
                 return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
             }
         }
         // If the block at the given position doesn't have a block entity (ItemRackBlockEntity), skip default interaction.
-        return ItemActionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+        return ActionResult.CONSUME;
     }
 
     public enum Type implements SofaBlock.SofaType {

@@ -21,12 +21,12 @@ public class ModBlockUtilities {
     }
 
     public static void tryMelt(BlockState state, World world, BlockPos pos, BlockState getMeltedState) {
-        if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity(world, pos)) {
+        if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity()) {
             if (world.getDimension().ultrawarm()) {
                 world.removeBlock(pos, false);
             } else {
                 world.setBlockState(pos, getMeltedState);
-                world.updateNeighbor(pos, getMeltedState.getBlock(), pos);
+                world.updateNeighbor(pos, getMeltedState.getBlock(), null);
             }
         }
     }
@@ -35,12 +35,12 @@ public class ModBlockUtilities {
         // Check if the block is water
         Biome biome = world.getBiome(pos).value();
         float temperature = biome.getTemperature();
-        if (world.getLightLevel(LightType.BLOCK, pos) <= 11 - state.getOpacity(world, pos) && temperature <= 0.15f) {
+        if (world.getLightLevel(LightType.BLOCK, pos) <= 11 - state.getOpacity() && temperature <= 0.15f) {
             if (world.getDimension().ultrawarm()) {
                 world.removeBlock(pos, false);
             } else {
                 world.setBlockState(pos, getFrozenState);
-                world.updateNeighbor(pos, getFrozenState.getBlock(), pos);
+                world.updateNeighbor(pos, getFrozenState.getBlock(), null);
             }
         }
     }

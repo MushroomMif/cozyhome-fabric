@@ -1,20 +1,16 @@
 package net.luckystudio.cozyhome.block.util.interfaces;
 
-import net.luckystudio.cozyhome.block.custom.ChairBlock;
 import net.luckystudio.cozyhome.block.custom.DeskBlock;
-import net.luckystudio.cozyhome.block.custom.TableBlock;
 import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationPropertyHelper;
@@ -26,13 +22,13 @@ public interface TuckableBlock {
     BooleanProperty TUCKED = ModProperties.TUCKED;
 
     // This is where we try and tuck the block in.
-    static ItemActionResult toggleTuck(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    static void toggleTuck(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         if (isFacingDirection(state)) { // Make sure the block is facing a direction.
             // If the block is already tucked, untuck it.
             if (state.get(TUCKED)) {
                 world.setBlockState(pos, state.with(TUCKED, false), 3);
                 playMoveSound(player, world, pos, state);
-                return ItemActionResult.SUCCESS;
+                return;
             }
 
             boolean isTuckable = !isAnotherTuckedBlockInTheWay(state, world, pos) && canTuckUnderBlockInFront(state, world, pos);
@@ -40,10 +36,8 @@ public interface TuckableBlock {
             if (isTuckable) {
                 world.setBlockState(pos, state.with(TUCKED, true));
                 playMoveSound(player, world, pos, state);
-                return ItemActionResult.SUCCESS;
             }
         }
-        return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     static boolean isFacingDirection(BlockState state) {

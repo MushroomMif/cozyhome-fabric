@@ -3,17 +3,12 @@ package net.luckystudio.cozyhome.entity.model;// Made with Blockbench 4.11.2
 // Paste this class into your mod and generate all required imports
 
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.render.entity.state.EntityRenderState;
 
-public class TelescopeModel extends EntityModel<Entity> {
-	private final ModelPart head;
-	private final ModelPart holder;
+public class TelescopeModel extends EntityModel<EntityRenderState> {
 	public TelescopeModel(ModelPart root) {
-		this.head = root.getChild("head");
-		this.holder = root.getChild("holder");
+		super(root);
 	}
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
@@ -25,14 +20,5 @@ public class TelescopeModel extends EntityModel<Entity> {
 		ModelPartData holder = modelPartData.addChild("holder", ModelPartBuilder.create().uv(0, 29).cuboid(-3.0F, -2.5F, -1.5F, 6.0F, 3.0F, 3.0F, new Dilation(0.0F))
 		.uv(16, 19).cuboid(-1.5F, 0.5F, -1.5F, 3.0F, 4.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 19.0F, 0.0F));
 		return TexturedModelData.of(modelData, 64, 64);
-	}
-	@Override
-	public void setAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		head.render(matrices, vertices, light, overlay);
-		holder.render(matrices, vertices, light, overlay);
 	}
 }

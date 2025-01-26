@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "cozyhome:chair",
+    "model": {
+      "type": "cozyhome:chair",
+      "chair_block_id": "cozyhome:glass_chair"
+    }
+  }
+}

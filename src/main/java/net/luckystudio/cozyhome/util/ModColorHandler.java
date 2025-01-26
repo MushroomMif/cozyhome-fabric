@@ -3,7 +3,6 @@ package net.luckystudio.cozyhome.util;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
-import net.minecraft.util.math.ColorHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -46,6 +45,6 @@ public class ModColorHandler {
             return defaultColor;
         }
         DyedColorComponent dyedColorComponent = entity.getComponents().get(DataComponentTypes.DYED_COLOR);
-        return dyedColorComponent != null ? ColorHelper.Argb.fullAlpha(dyedColorComponent.rgb()) : defaultColor;
+        return dyedColorComponent != null ? dyedColorComponent.rgb() : defaultColor;
     }
 }

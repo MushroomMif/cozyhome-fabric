@@ -10,10 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -36,7 +36,7 @@ public interface Strippable {
     }
 
     // Method that is called when an axe is used on the block
-    static ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    static ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Block strippedBlock = getStrippedVersion(state);
         if (strippedBlock != Blocks.AIR) {
             ItemStack itemStack = player.getStackInHand(hand);
@@ -48,10 +48,10 @@ public interface Strippable {
                     // Damage the axe
                     itemStack.damage(1, player, LivingEntity.getSlotForHand(hand));  // Axe durability damage
                 }
-                return ItemActionResult.SUCCESS;
+                return ActionResult.SUCCESS;
             }
         }
-        return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 }
 

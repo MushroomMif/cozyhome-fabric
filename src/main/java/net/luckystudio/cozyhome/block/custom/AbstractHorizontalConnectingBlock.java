@@ -13,7 +13,10 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractHorizontalConnectingBlock extends Block implements Waterloggable, AllSidesConnectingBlock {
@@ -67,9 +70,18 @@ public abstract class AbstractHorizontalConnectingBlock extends Block implements
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
+    ) {
         if (state.get(WATERLOGGED)) {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         return state
                 .with(NORTH, checkDirectionalNeighbor(state, Direction.NORTH, world, pos))
@@ -82,12 +94,12 @@ public abstract class AbstractHorizontalConnectingBlock extends Block implements
                 .with(SOUTH_WEST, checkDiagonalNeighbor(state, Direction.SOUTH, Direction.WEST, world, pos));
     }
 
-    private boolean checkDirectionalNeighbor(BlockState state, Direction direction, WorldAccess world, BlockPos pos) {
+    private boolean checkDirectionalNeighbor(BlockState state, Direction direction, WorldView world, BlockPos pos) {
         BlockPos targetPos = pos.offset(direction);
         return isMatchingBlock(state, world.getBlockState(targetPos));
     }
 
-    private boolean checkDiagonalNeighbor(BlockState state, Direction direction1, Direction direction2, WorldAccess world, BlockPos pos) {
+    private boolean checkDiagonalNeighbor(BlockState state, Direction direction1, Direction direction2, WorldView world, BlockPos pos) {
         // Ensure both adjacent directions (e.g., NORTH and EAST) are set to true in the state
         BooleanProperty property1 = getDirectionalProperty(direction1);
         BooleanProperty property2 = getDirectionalProperty(direction2);

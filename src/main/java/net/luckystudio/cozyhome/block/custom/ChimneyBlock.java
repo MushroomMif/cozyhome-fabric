@@ -16,11 +16,13 @@ import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class ChimneyBlock extends BlockWithEntity {
@@ -87,7 +89,16 @@ public class ChimneyBlock extends BlockWithEntity {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state,
+            WorldView world,
+            ScheduledTickView tickView,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            Random random
+    )  {
         BlockPos relativeHeadBlockPos = pos.up();
         BlockPos relativeTailBlockPos = pos.down();
 
@@ -99,7 +110,7 @@ public class ChimneyBlock extends BlockWithEntity {
         return state.with(STACKABLE_BLOCK, LinearConnectionBlockType).with(LIT, isLIT(world, pos));
     }
 
-    private boolean isLIT(WorldAccess world, BlockPos pos) {
+    private boolean isLIT(WorldView world, BlockPos pos) {
         for (int i = 1; i < 2; i++) {
             BlockPos blockPosBelow = pos.down(i);
             BlockState blockStateBelow = world.getBlockState(blockPosBelow);

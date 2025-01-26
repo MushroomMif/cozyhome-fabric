@@ -4,6 +4,7 @@ import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.block.util.interfaces.ClockBlock;
 import net.luckystudio.cozyhome.sound.ModSoundEvents;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
@@ -71,7 +72,7 @@ public class ClockFunctionalityHandler {
         return wrapAngle(interpolated); // Normalize to 0–360 range
     }
 
-    public static void handleGrandfatherClock(World world, BlockPos pos, BlockState state, ClockBlock blockEntity, float pendulumAmplitude) {
+    public static void handleGrandfatherClock(ServerWorld world, BlockPos pos, BlockState state, ClockBlock blockEntity, float pendulumAmplitude) {
         long worldTime = blockEntity.getWorld().getTimeOfDay() % 24000;
 
         if (worldTime == 18000 && world.getGameRules().getBoolean(GameRules.DO_DAYLIGHT_CYCLE)) {

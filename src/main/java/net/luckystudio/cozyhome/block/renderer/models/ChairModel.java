@@ -4,26 +4,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * This is the model of the chair.
  */
 @Environment(EnvType.CLIENT)
 public class ChairModel extends Model {
-	private final ModelPart chair;
-	private final ModelPart back;
-	private final ModelPart seat;
-	private final ModelPart bb_main;
-
 	public ChairModel(ModelPart root) {
-		super(RenderLayer::getEntitySolid);
-        this.chair = root.getChild("chair");
-		this.back = root.getChild("back");
-		this.seat = root.getChild("seat");
-		this.bb_main = root.getChild("bb_main");
+		super(root, RenderLayer::getEntitySolid);
 	}
 
 	public static TexturedModelData getTexturedModelData() {
@@ -61,11 +49,5 @@ public class ChairModel extends Model {
 
 		ModelPartData front_cover_r1 = bb_main.addChild("front_cover_r1", ModelPartBuilder.create().uv(0, 30).cuboid(-5.0F, 0.0F, 0.0F, 10.0F, 8.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.0F, -5.0F, -0.0436F, 0.0F, 0.0F));
 		return TexturedModelData.of(modelData, 64, 64);
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		chair.render(matrices, vertices, light, overlay);
-		bb_main.render(matrices, vertices, light, overlay);
 	}
 }

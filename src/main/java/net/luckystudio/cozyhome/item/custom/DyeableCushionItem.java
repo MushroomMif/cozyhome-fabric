@@ -1,7 +1,6 @@
 package net.luckystudio.cozyhome.item.custom;
 
 import net.luckystudio.cozyhome.util.ModColorHandler;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -9,17 +8,6 @@ import net.minecraft.text.Text;
 public class DyeableCushionItem extends CushionItem {
     public DyeableCushionItem(Settings settings) {
         super(settings);
-    }
-
-    @Override
-    public ItemStack getDefaultStack() {
-        ItemStack stack = super.getDefaultStack();
-        return stack;
-    }
-
-    @Override
-    public ComponentMap getComponents() {
-        return super.getComponents();
     }
 
     @Override

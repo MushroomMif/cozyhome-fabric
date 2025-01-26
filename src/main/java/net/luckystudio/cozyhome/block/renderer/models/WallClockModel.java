@@ -5,15 +5,13 @@ package net.luckystudio.cozyhome.block.renderer.models;// Made with Blockbench 4
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class WallClockModel extends Model {
 	private final ModelPart hour_hand;
 	private final ModelPart minute_hand;
 	private final ModelPart bb_main;
 	public WallClockModel(ModelPart root) {
-        super(RenderLayer::getEntityCutout);
+        super(root,RenderLayer::getEntityCutout);
         this.hour_hand = root.getChild("hour_hand");
 		this.minute_hand = root.getChild("minute_hand");
 		this.bb_main = root.getChild("bb_main");
@@ -39,13 +37,6 @@ public class WallClockModel extends Model {
 
 		ModelPartData frame_top_r1 = bb_main.addChild("frame_top_r1", ModelPartBuilder.create().uv(15, 13).cuboid(-4.0F, 0.0F, -0.5F, 8.0F, 0.0F, 1.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -12.0F, 7.5F, 0.0F, 0.0F, -3.1416F));
 		return TexturedModelData.of(modelData, 32, 32);
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		hour_hand.render(matrices, vertices, light, overlay);
-		minute_hand.render(matrices, vertices, light, overlay);
-		bb_main.render(matrices, vertices, light, overlay);
 	}
 
 	public void setAngles(float hourHandTurnAmount, float minuteHandTurnAmount) {

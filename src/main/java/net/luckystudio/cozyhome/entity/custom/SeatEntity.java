@@ -3,9 +3,11 @@ package net.luckystudio.cozyhome.entity.custom;
 import net.luckystudio.cozyhome.block.custom.AbstractSeatBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -148,5 +150,10 @@ public class SeatEntity extends Entity {
     @Override
     protected Vec3d adjustMovementForPiston(Vec3d movement) {
         return super.adjustMovementForPiston(movement);
+    }
+
+    @Override
+    public boolean damage(ServerWorld world, DamageSource source, float amount) {
+        return false;
     }
 }

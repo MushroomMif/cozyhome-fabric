@@ -13,14 +13,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class SinkCounterBlock extends Block {
     public static final MapCodec<SinkCounterBlock> CODEC = createCodec(SinkCounterBlock::new);
 
-    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
     public static final IntProperty LEVEL = ModProperties.FILLED_LEVEL_0_3;
     public static final IntProperty NEXT_LEVEL = ModProperties.NEXT_LEVEL;
     public static final BooleanProperty TRIGGERED = Properties.TRIGGERED;
@@ -124,7 +123,7 @@ public class SinkCounterBlock extends Block {
     }
 
     @Override
-    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         SinkBehavior sinkBehavior = SinkBehavior.BASE.map().get(stack.getItem());
         return sinkBehavior.interact(state, world, pos, player, hand, stack);
     }

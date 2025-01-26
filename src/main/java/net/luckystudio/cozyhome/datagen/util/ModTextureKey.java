@@ -1,6 +1,7 @@
 package net.luckystudio.cozyhome.datagen.util;
 
-import net.minecraft.data.client.TextureKey;
+
+import net.minecraft.client.data.TextureKey;
 
 public class ModTextureKey {
     public static final TextureKey INNER_SIDE = TextureKey.of("inner_side");

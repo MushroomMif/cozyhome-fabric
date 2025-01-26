@@ -1,17 +1,14 @@
 package net.luckystudio.cozyhome.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -75,7 +72,7 @@ public class MirrorScreen extends Screen {
         float q = (float) size / p;
 
         // Render the entity at the specified screen position
-        drawEntity(context, x, y, q, vector3f, quaternionf, quaternionf2, entity);
+        InventoryScreen.drawEntity(context, x, y, q, vector3f, quaternionf, quaternionf2, entity);
 
         // Reset entity rotation after rendering
         entity.bodyYaw = k;
@@ -85,31 +82,31 @@ public class MirrorScreen extends Screen {
         entity.headYaw = o;
     }
 
-    public static void drawEntity(
-            DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, @Nullable Quaternionf quaternionf2, LivingEntity entity
-    ) {
-        context.getMatrices().push();
-        context.getMatrices().translate((double) x, (double) y, 50.0);
-        context.getMatrices().scale(size, size, -size);
-        context.getMatrices().translate(vector3f.x, vector3f.y, vector3f.z);
-        context.getMatrices().multiply(quaternionf);
-
-        DiffuseLighting.method_34742();
-
-        // Render the entity using the EntityRenderDispatcher
-        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        if (quaternionf2 != null) {
-            entityRenderDispatcher.setRotation(quaternionf2.conjugate(new Quaternionf()).rotateY((float) Math.PI));
-        }
-
-        entityRenderDispatcher.setRenderShadows(false);
-        RenderSystem.runAsFancy(() -> entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, context.getMatrices(), context.getVertexConsumers(), 15728880));
-        context.draw();
-        entityRenderDispatcher.setRenderShadows(true);
-
-        context.getMatrices().pop();
-        DiffuseLighting.enableGuiDepthLighting();
-    }
+//    public static void drawEntity(
+//            DrawContext context, float x, float y, float size, Vector3f vector3f, Quaternionf quaternionf, @Nullable Quaternionf quaternionf2, LivingEntity entity
+//    ) {
+//        context.getMatrices().push();
+//        context.getMatrices().translate((double) x, (double) y, 50.0);
+//        context.getMatrices().scale(size, size, -size);
+//        context.getMatrices().translate(vector3f.x, vector3f.y, vector3f.z);
+//        context.getMatrices().multiply(quaternionf);
+//
+//        DiffuseLighting.method_34742();
+//
+//        // Render the entity using the EntityRenderDispatcher
+//        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
+//        if (quaternionf2 != null) {
+//            entityRenderDispatcher.setRotation(quaternionf2.conjugate(new Quaternionf()).rotateY((float) Math.PI));
+//        }
+//
+//        entityRenderDispatcher.setRenderShadows(false);
+//        RenderSystem.runAsFancy(() -> entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, context.getMatrices(), context.getVertexConsumers(), 15728880));
+//        context.draw();
+//        entityRenderDispatcher.setRenderShadows(true);
+//
+//        context.getMatrices().pop();
+//        DiffuseLighting.enableGuiDepthLighting();
+//    }
 
 
     // So when the player presses any button the screen closes

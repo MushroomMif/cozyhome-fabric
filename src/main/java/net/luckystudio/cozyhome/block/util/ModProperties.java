@@ -5,12 +5,15 @@ import net.luckystudio.cozyhome.block.util.interfaces.ConnectingBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.enums.StairShape;
-import net.minecraft.state.property.*;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationPropertyHelper;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 
 public class ModProperties {
 
@@ -65,7 +68,7 @@ public class ModProperties {
         return RotationPropertyHelper.toDegrees(rotation) + 180;
     }
 
-    public static VerticalLinearConnectionBlock setVerticalConnection(BlockState state, WorldAccess world, BlockPos pos) {
+    public static VerticalLinearConnectionBlock setVerticalConnection(BlockState state, WorldView world, BlockPos pos) {
         if (state.getBlock() instanceof ConnectingBlock connectingBlock) {
             boolean isMatchingBlockAbove = connectingBlock.isMatchingBlock(world.getBlockState(pos.up()));
             boolean isMatchingBlockBelow = connectingBlock.isMatchingBlock(world.getBlockState(pos.down()));
@@ -106,7 +109,7 @@ public class ModProperties {
         return StairShape.STRAIGHT;
     }
 
-    public static HorizontalLinearConnectionBlock setHorizontalConnection(BlockState state, WorldAccess world, BlockPos pos) {
+    public static HorizontalLinearConnectionBlock setHorizontalConnection(BlockState state, WorldView world, BlockPos pos) {
         Direction facing = state.get(HorizontalFacingBlock.FACING);
 
         Direction left = facing.rotateYClockwise();
@@ -127,7 +130,7 @@ public class ModProperties {
         return HorizontalLinearConnectionBlock.SINGLE;
     }
 
-    public static AdvancedHorizontalLinearConnectionBlock updateAdvancedHorizontalConnections(BlockState state, WorldAccess world, BlockPos pos) {
+    public static AdvancedHorizontalLinearConnectionBlock updateAdvancedHorizontalConnections(BlockState state, WorldView world, BlockPos pos) {
         Direction facing = state.get(HorizontalFacingBlock.FACING);
         // Determine left and right directions based on the block's facing
         Direction left = facing.rotateYClockwise();
@@ -158,7 +161,7 @@ public class ModProperties {
         return setConnections(state, world, pos, left, right);
     }
 
-    private static AdvancedHorizontalLinearConnectionBlock setConnections(BlockState state, WorldAccess world, BlockPos pos, Direction left, Direction right) {
+    private static AdvancedHorizontalLinearConnectionBlock setConnections(BlockState state, WorldView world, BlockPos pos, Direction left, Direction right) {
         boolean canConnectLeft = canConnect(state, world, pos, left);
         boolean canConnectRight = canConnect(state, world, pos, right);
         BlockState stateLeft = world.getBlockState(pos.offset(left));
@@ -185,7 +188,7 @@ public class ModProperties {
         return AdvancedHorizontalLinearConnectionBlock.SINGLE;
     }
 
-    private static boolean canConnect(BlockState state, WorldAccess world, BlockPos pos, Direction direction) {
+    private static boolean canConnect(BlockState state, WorldView world, BlockPos pos, Direction direction) {
         BlockState neighborState = world.getBlockState(pos.offset(direction));
         BlockState neighborState2 = world.getBlockState(pos.offset(direction,2));
         // Test if the block next to it is already connected to a block

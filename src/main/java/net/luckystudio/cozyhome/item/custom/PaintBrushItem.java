@@ -14,6 +14,7 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenTexts;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -62,7 +63,7 @@ public class PaintBrushItem extends BrushItem {
 
                     world.playSound(playerEntity, blockPos, soundEvent, SoundCategory.BLOCKS);
                     if (!world.isClient() && world.getBlockEntity(blockPos) instanceof BrushableBlockEntity brushableBlockEntity) {
-                        boolean bl2 = brushableBlockEntity.brush(world.getTime(), playerEntity, blockHitResult.getSide());
+                        boolean bl2 = brushableBlockEntity.brush(world.getTime(), ((ServerWorld) world),  playerEntity, blockHitResult.getSide(), stack);
                         if (bl2) {
                             EquipmentSlot equipmentSlot = stack.equals(playerEntity.getEquippedStack(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
                             stack.damage(1, user, equipmentSlot);
@@ -88,7 +89,7 @@ public class PaintBrushItem extends BrushItem {
         int j = world.getRandom().nextBetweenExclusive(7, 12);
         BlockStateParticleEffect blockStateParticleEffect = new BlockStateParticleEffect(ParticleTypes.BLOCK, state);
         Direction direction = hitResult.getSide();
-        PaintBrushItem.DustParticlesOffset dustParticlesOffset = PaintBrushItem.DustParticlesOffset.fromSide(userRotation, direction);
+        DustParticlesOffset dustParticlesOffset = DustParticlesOffset.fromSide(userRotation, direction);
         Vec3d vec3d = hitResult.getPos();
 
         for (int k = 0; k < j; k++) {
@@ -105,15 +106,15 @@ public class PaintBrushItem extends BrushItem {
     }
     record DustParticlesOffset(double xd, double yd, double zd) {
 
-        public static PaintBrushItem.DustParticlesOffset fromSide(Vec3d userRotation, Direction side) {
+        public static DustParticlesOffset fromSide(Vec3d userRotation, Direction side) {
             double d = 0.0;
 
             return switch (side) {
-                case DOWN, UP -> new PaintBrushItem.DustParticlesOffset(userRotation.getZ(), 0.0, -userRotation.getX());
-                case NORTH -> new PaintBrushItem.DustParticlesOffset(1.0, 0.0, -0.1);
-                case SOUTH -> new PaintBrushItem.DustParticlesOffset(-1.0, 0.0, 0.1);
-                case WEST -> new PaintBrushItem.DustParticlesOffset(-0.1, 0.0, -1.0);
-                case EAST -> new PaintBrushItem.DustParticlesOffset(0.1, 0.0, 1.0);
+                case DOWN, UP -> new DustParticlesOffset(userRotation.getZ(), 0.0, -userRotation.getX());
+                case NORTH -> new DustParticlesOffset(1.0, 0.0, -0.1);
+                case SOUTH -> new DustParticlesOffset(-1.0, 0.0, 0.1);
+                case WEST -> new DustParticlesOffset(-0.1, 0.0, -1.0);
+                case EAST -> new DustParticlesOffset(0.1, 0.0, 1.0);
             };
         }
     }

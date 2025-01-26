@@ -1,8 +1,8 @@
 package net.luckystudio.cozyhome.datagen.util;
 
 import net.luckystudio.cozyhome.CozyHome;
-import net.minecraft.data.client.Model;
-import net.minecraft.data.client.TextureKey;
+import net.minecraft.client.data.Model;
+import net.minecraft.client.data.TextureKey;
 
 import java.util.Optional;
 
